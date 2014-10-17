@@ -57,7 +57,7 @@ module ddr3_module (
     sda
 );
 
-`include "ddr3_parameters.vh"
+`include "1024Mb_ddr3_parameters.vh"
 
     input                  reset_n;
     input            [1:0] cke    ;
@@ -79,7 +79,7 @@ module ddr3_module (
     initial if (DEBUG) $display("%m: Dual Rank");
 `else
     initial if (DEBUG) $display("%m: Single Rank");
-`endif `endif
+`endif 
 
 `ifdef ECC
     initial if (DEBUG) $display("%m: ECC");
@@ -191,7 +191,7 @@ module ddr3_module (
 `else
     wire            [15:0] maddr  = raddr;
     wire             [2:0] mba    = rba;
-`endif `endif
+`endif
 
   //ddr3       (rst_n  , ck    , ck_n    , cke    , cs_n   , ras_n , cas_n , we_n , dm_tdqs       , ba , addr                , dq             , dqs           , dqs_n          , tdqs_n   , odt    );
 `ifdef x4
@@ -372,6 +372,6 @@ module ddr3_module (
     ddr3 U3R3  (reset_n, rck[1], rck_n[1], rcke[3], rs_n[3], rras_n, rcas_n, rwe_n, {one, dqs[17]}, rba, raddr[ADDR_BITS-1:0], rcb[15: 0], {zero, dqs[8]}, {one, dqs_n[8]},          , rodt[3]);
         `endif
     `endif
-`endif `endif `endif
+`endif 
 
 endmodule

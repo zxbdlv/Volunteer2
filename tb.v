@@ -184,16 +184,16 @@ module tb;
       ck <= #(tck) 1'b1;
     end
 
-    function integer ceil;
+   /* function integer ceil;
         input number;
         real number;
         if (number > $rtoi(number))
             ceil = $rtoi(number) + 1;
         else
             ceil = number;
-    endfunction
+    endfunction*/
 
-    function integer max;
+    /*function integer max;
         input arg1;
         input arg2;
         integer arg1;
@@ -202,7 +202,7 @@ module tb;
             max = arg1;
         else
             max = arg2;
-    endfunction
+    endfunction*/
 
     task power_up;
         begin
@@ -575,4 +575,10 @@ module dqrx (
     assign q1 = q[1];
     assign q2 = q[2];
     assign q3 = q[3];
+
+
+	initial begin
+		$dumpfile("model.vcd");
+		$dumpvars;
+	end
 endmodule

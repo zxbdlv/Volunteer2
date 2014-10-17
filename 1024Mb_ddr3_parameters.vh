@@ -701,3 +701,26 @@ function [3:0] min_cl;
         end
     end
 endfunction
+
+
+function integer ceil;
+        input number;
+        real number;
+
+        // LMR 4.1.7
+        // When either operand of a relational expression is a real operand then the other operand shall be converted
+        // to an equivalent real value, and the expression shall be interpreted as a comparison between two real values.
+        if (number > $rtoi(number))
+            ceil = $rtoi(number) + 1;
+        else
+            ceil = number;
+endfunction
+
+function int max( input int a, b );
+        max = (a < b) ? b : a;
+    endfunction
+
+    function int min( input int a, b );
+        min = (a > b) ? b : a;
+endfunction
+

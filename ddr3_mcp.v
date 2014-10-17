@@ -51,7 +51,7 @@ module ddr3_mcp (
     odt
 );
 
-    `include "ddr3_parameters.vh"
+    `include "1024Mb_ddr3_parameters.vh"
 
     // Declare Ports
     input   rst_n;
