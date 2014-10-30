@@ -2,7 +2,7 @@
 
 module check;
 
-	reg   rst_n;
+    reg   rst_n;
     reg   ck;
     reg   ck_n;
     reg   cke;
@@ -16,11 +16,11 @@ module check;
     wire   [DQ_BITS-1:0]   dq;
     wire   [DQS_BITS-1:0]  dqs;
     wire   [DQS_BITS-1:0]  dqs_n;
-    output  [DQS_BITS-1:0]  tdqs_n;
+    wire  [DQS_BITS-1:0]  tdqs_n;
     reg   odt;
 
 
-    ddr3_controller control(
+    ddr3 control(
 				    rst_n,
 				    ck,
 				    ck_n,
@@ -42,7 +42,7 @@ module check;
 
     initial begin
 
-    	rst_n = 1'b0; #190;
+    	rst_n = 1'b0; #199990;
     	cke = 1'b0; #10 rst_n = 1'b1;
     	#500000;
     	@(posedge ck) cke = 1'b1;
