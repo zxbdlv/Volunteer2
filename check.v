@@ -1,6 +1,8 @@
 `timescale 1ns/10ps
 
-module check;
+// Cycle time 0.938ns
+
+module check();
 
     reg   rst_n;
     reg   ck;
@@ -39,8 +41,8 @@ module check;
 				    odt
 	);
 
-
-    initial begin
+// Reset sequence test
+    /*initial begin
 
     	rst_n = 1'b0; #199990;
     	cke = 1'b0; #10 rst_n = 1'b1;
@@ -53,7 +55,74 @@ module check;
 
 
     end
+*/
 
+	reg reset_done;
+	reg [19:0] count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2;
+
+	initial begin
+		ck_n = 0;
+		
+	end
+
+
+
+	always #0.469 ck_n = ~ck_n;
+
+	/*
+    		 repeat(213209) begin 
+				@(negedge(ck_n)); cke = 1'b0;
+			 end
+    		 repeat(11) @(negedge(ck_n)); rst_n = 1'b1;
+    		 repeat(533049) @(negedge(ck_n)); cke = 1'b1;
+    		 repeat(11) @(negedge(ck_n)); odt = 1'b0;
+    		 repeat(38) @(negedge(ck_n)); cke = 1'b1;
+    		 */
+
+
+    always @(*)
+    	begin
+    		 
+    		 reset_done = 0;
+    		// 
+    		 /*rst_n = 1'b0;
+		 cke     = 1'b0;
+            	 cs_n    = 1'b1;
+           	 odt = 1'b0;*/
+		cke = (count_200us == 20'd213208) ? 0 : cke;	//213208
+		rst_n = (count_10ns_1 == 20'd213219) ? 1'b1 : rst_n;	//213219
+		cke = (count_500us == 20'd746268) ? 1'b1 : cke;
+		odt = (count_10ns_2 == 20'd746279) ? 1'b0 : odt;
+		{cke, reset_done} = (count_TIS == 20'd746317) ? 2'b11 : {cke, reset_done}; //746317
+		
+    end		
+
+    		 always @(negedge(ck_n)) begin
+			
+	    		 	count_200us <= count_200us + 1'd1;
+	    		 	
+	    		 	
+	    		 	count_10ns_1 <= count_10ns_1 + 1'd1;
+	    		 		    		 	
+
+	    		 	count_500us <= count_500us + 1'd1;
+	    		 	
+
+	    		 	count_10ns_2 <= count_10ns_2 + 1'd1;
+	    		 	
+
+	    		 	count_TIS <= count_TIS + 1'd1;
+	    		 	
+				
+	    			
+    		 end
+
+initial begin
+	{count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2} = 0;
+end
+
+    		 
+    	
 
 endmodule
 
