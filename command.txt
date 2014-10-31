@@ -1,0 +1,3 @@
+vcs -sverilog 1024Mb_ddr3_parameters.vh +define+den1024Mb ddr3.sv check.v
+
+./simv
