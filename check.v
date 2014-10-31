@@ -58,17 +58,18 @@ module check();
 */
 
 	reg reset_done;
-	reg [19:0] count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2;
+	reg [19:0] count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2, count_txpr;
+
+	
+///////////////////////////////////////// clock generation //////////////////////////////////////
 
 	initial begin
 		ck_n = 0;
 		
 	end
 
-
-
 	always #0.469 ck_n = ~ck_n;
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
 	/*
     		 repeat(213209) begin 
 				@(negedge(ck_n)); cke = 1'b0;
@@ -79,23 +80,24 @@ module check();
     		 repeat(38) @(negedge(ck_n)); cke = 1'b1;
     		 */
 
+/////////////////////////////////////////////// Reset sequence ///////////////////////////////////////////////////////////
 
-    always @(*)
-    	begin
+   		 always @(*) begin
     		 
-    		 reset_done = 0;
-    		// 
-    		 /*rst_n = 1'b0;
-		 cke     = 1'b0;
-            	 cs_n    = 1'b1;
-           	 odt = 1'b0;*/
-		cke = (count_200us == 20'd213208) ? 0 : cke;	//213208
-		rst_n = (count_10ns_1 == 20'd213219) ? 1'b1 : rst_n;	//213219
-		cke = (count_500us == 20'd746268) ? 1'b1 : cke;
-		odt = (count_10ns_2 == 20'd746279) ? 1'b0 : odt;
-		{cke, reset_done} = (count_TIS == 20'd746317) ? 2'b11 : {cke, reset_done}; //746317
-		
-    end		
+	    		 reset_done = 0;
+	    		// 
+	    		 /*rst_n = 1'b0;
+			 cke     = 1'b0;
+		    	 cs_n    = 1'b1;
+		   	 odt = 1'b0;*/
+			cke = (count_200us == 20'd213208) ? 0 : cke;	//213208
+			rst_n = (count_10ns_1 == 20'd213219) ? 1'b1 : rst_n;	//213219
+			cke = (count_500us == 20'd746268) ? 1'b1 : cke;
+			odt = (count_10ns_2 == 20'd746279) ? 1'b0 : odt;
+			{cke, reset_done} = (count_TIS == 20'd746317) ? 2'b11 : {cke, reset_done}; //746317
+			{cke, cs_n, ras_n, cas_n, we_n, ba, addr} = (count_txpr == 20'd130) ? {5'b10110, 3'd2, $random} : {cke, cs_n, ras_n, cas_n, we_n, ba, addr};
+			
+		end
 
     		 always @(negedge(ck_n)) begin
 			
@@ -112,16 +114,18 @@ module check();
 	    		 	
 
 	    		 	count_TIS <= count_TIS + 1'd1;
+				
+				count_txpr <= count_txpr + 1'd1;
 	    		 	
 				
 	    			
     		 end
 
-initial begin
-	{count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2} = 0;
-end
+		initial begin
+			{count_200us, count_500us, count_TIS, count_10ns_1, count_10ns_2, count_txpr} = 0;
+		end
 
-    		 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    		 
     	
 
 endmodule
