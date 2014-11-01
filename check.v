@@ -68,6 +68,7 @@ module check();
 
 
 	always #0.469 ck_n = ~ck_n;
+	
 
 	/*
     		 repeat(213209) begin 
@@ -82,7 +83,7 @@ module check();
 
     always @(*)
     	begin
-    		 
+    		 ck = ~ck_n;
     		 reset_done = 0;
     		// 
     		 /*rst_n = 1'b0;
