@@ -84,6 +84,7 @@ module check();
 
    		 always @(*) begin
     		 
+			 ck = ~ck_n;
 	    		 reset_done = 0;
 	    		// 
 	    		 /*rst_n = 1'b0;
@@ -95,12 +96,16 @@ module check();
 			cke = (count_500us == 20'd746268) ? 1'b1 : cke;
 			odt = (count_10ns_2 == 20'd746279) ? 1'b0 : odt;
 			{cke, reset_done} = (count_TIS == 20'd746317) ? 2'b11 : {cke, reset_done}; //746317
-			{cke, cs_n, ras_n, cas_n, we_n, ba, addr} = (count_txpr == 20'd130) ? {5'b10110, 3'd2, $random} : {cke, cs_n, ras_n, cas_n, we_n, ba, addr};
+			{cke, cs_n, ras_n, cas_n, we_n} = (count_txpr == 20'd128) ? 5'b10110 : {cke, cs_n, ras_n, cas_n, we_n};	//ZQ
+			//#81386;
 			
+			{cke, cs_n, ras_n, cas_n, we_n, addr, ba} =  {5'b10000, $random, $random};	//
+			//{cke, cs_n, ras_n, cas_n, we_n, addr, ba} = {5'b10011, addr, ba};
+			#0.5;
 		end
 
     		 always @(negedge(ck_n)) begin
-			
+			if (!reset_done) begin
 	    		 	count_200us <= count_200us + 1'd1;
 	    		 	
 	    		 	
@@ -116,7 +121,7 @@ module check();
 	    		 	count_TIS <= count_TIS + 1'd1;
 				
 				count_txpr <= count_txpr + 1'd1;
-	    		 	
+	    		end 	
 				
 	    			
     		 end
